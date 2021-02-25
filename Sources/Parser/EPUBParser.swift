@@ -28,7 +28,7 @@ public final class EPUBParser: EPUBParserProtocol {
         tableOfContentsParser = EPUBTableOfContentsParserImplementation()
     }
 
-    public func parse(documentAt path: URL, unarchiveDirectory directoryPath: URL?) throws -> EPUBDocument {
+    public func parse(documentAt path: URL, extractionDirectory directoryPath: URL?) throws -> EPUBDocument {
         var directory: URL
         var contentDirectory: URL
         var metadata: EPUBMetadata
@@ -40,7 +40,7 @@ public final class EPUBParser: EPUBParserProtocol {
             var isDirectory: ObjCBool = false
             FileManager.default.fileExists(atPath: path.path, isDirectory: &isDirectory)
 
-            directory = isDirectory.boolValue ? path : try unzip(archiveAt: path, unarchiveDirectory: directoryPath)
+            directory = isDirectory.boolValue ? path : try unzip(archiveAt: path, extractionDirectory: directoryPath)
             delegate?.parser(self, didUnzipArchiveTo: directory)
 
             let contentService = try EPUBContentServiceImplementation(directory)
@@ -75,8 +75,8 @@ public final class EPUBParser: EPUBParserProtocol {
 }
 
 extension EPUBParser: EPUBParsable {
-    public func unzip(archiveAt path: URL) throws -> URL {
-        try archiveService.unarchive(archive: path)
+    public func unzip(archiveAt path: URL, extractionDirectory extractionPath: URL) throws -> URL {
+        try archiveService.unarchive(archive: path, extractionDirectory: extractionPath)
     }
 
     public func getSpine(from xmlElement: XMLElement) -> EPUBSpine {

@@ -31,8 +31,8 @@ public struct EPUBDocument {
         self.tableOfContents = tableOfContents
     }
 
-    public init?(url: URL, unarchiveDirectory: URL?) {
-        guard let document = try? EPUBParser().parse(documentAt: url, unarchiveDirectory: unarchiveDirectory) else { return nil }
+    public init?(url: URL, extractionDirectory: URL?) {
+        guard let document = try? EPUBParser().parse(documentAt: url, extractionDirectory: extractionDirectory) else { return nil }
         self = document
     }
 }
