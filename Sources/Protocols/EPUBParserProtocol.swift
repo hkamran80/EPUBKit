@@ -10,5 +10,5 @@ import Foundation
 
 public protocol EPUBParserProtocol where Self: EPUBParsable {
     var delegate: EPUBParserDelegate? { get set }
-    func parse(documentAt path: URL) throws -> EPUBDocument
+    func parse(documentAt path: URL, extractionDirectory directoryPath: URL?) throws -> EPUBDocument
 }
