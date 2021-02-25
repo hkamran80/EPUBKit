@@ -6,11 +6,10 @@
 //  Copyright © 2017 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 public final class EPUBParser: EPUBParserProtocol {
-
     public typealias XMLElement = AEXMLElement
 
     private let archiveService: EPUBArchiveService
@@ -29,7 +28,7 @@ public final class EPUBParser: EPUBParserProtocol {
         tableOfContentsParser = EPUBTableOfContentsParserImplementation()
     }
 
-    public func parse(documentAt path: URL) throws -> EPUBDocument {
+    public func parse(documentAt path: URL, unarchiveDirectory directoryPath: URL?) throws -> EPUBDocument {
         var directory: URL
         var contentDirectory: URL
         var metadata: EPUBMetadata
@@ -40,15 +39,15 @@ public final class EPUBParser: EPUBParserProtocol {
         do {
             var isDirectory: ObjCBool = false
             FileManager.default.fileExists(atPath: path.path, isDirectory: &isDirectory)
-            
-            directory = isDirectory.boolValue ? path : try unzip(archiveAt: path)
+
+            directory = isDirectory.boolValue ? path : try unzip(archiveAt: path, unarchiveDirectory: directoryPath)
             delegate?.parser(self, didUnzipArchiveTo: directory)
 
             let contentService = try EPUBContentServiceImplementation(directory)
             contentDirectory = contentService.contentDirectory
             delegate?.parser(self, didLocateContentAt: contentDirectory)
 
-            spine =  getSpine(from: contentService.spine)
+            spine = getSpine(from: contentService.spine)
             delegate?.parser(self, didFinishParsing: spine)
 
             metadata = getMetadata(from: contentService.metadata)
@@ -64,7 +63,7 @@ public final class EPUBParser: EPUBParserProtocol {
 
             tableOfContents = getTableOfContents(from: tableOfContentsElement)
             delegate?.parser(self, didFinishParsing: tableOfContents)
-        } catch let error {
+        } catch {
             delegate?.parser(self, didFailParsingDocumentAt: path, with: error)
             throw error
         }
@@ -73,11 +72,9 @@ public final class EPUBParser: EPUBParserProtocol {
                             metadata: metadata, manifest: manifest,
                             spine: spine, tableOfContents: tableOfContents)
     }
-
 }
 
 extension EPUBParser: EPUBParsable {
-
     public func unzip(archiveAt path: URL) throws -> URL {
         try archiveService.unarchive(archive: path)
     }
@@ -97,5 +94,4 @@ extension EPUBParser: EPUBParsable {
     public func getTableOfContents(from xmlElement: XMLElement) -> EPUBTableOfContents {
         tableOfContentsParser.parse(xmlElement)
     }
-
 }

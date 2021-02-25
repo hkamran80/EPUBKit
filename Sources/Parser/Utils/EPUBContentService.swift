@@ -6,8 +6,8 @@
 //  Copyright © 2018 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 protocol EPUBContentService {
     var contentDirectory: URL { get }
@@ -19,7 +19,6 @@ protocol EPUBContentService {
 }
 
 class EPUBContentServiceImplementation: EPUBContentService {
-
     private var content: AEXMLDocument
 
     let contentDirectory: URL
@@ -40,12 +39,10 @@ class EPUBContentServiceImplementation: EPUBContentService {
         let data = try Data(contentsOf: path)
         return try AEXMLDocument(xml: data).root
     }
-
 }
 
 extension EPUBContentServiceImplementation {
-
-    static private func getContentPath(from url: URL) throws -> URL {
+    private static func getContentPath(from url: URL) throws -> URL {
         let path = url.appendingPathComponent("META-INF/container.xml")
         guard let data = try? Data(contentsOf: path) else {
             throw EPUBParserError.containerMissing
@@ -56,5 +53,4 @@ extension EPUBContentServiceImplementation {
         }
         return url.appendingPathComponent(content)
     }
-
 }

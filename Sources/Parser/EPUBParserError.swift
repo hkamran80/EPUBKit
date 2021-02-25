@@ -16,6 +16,7 @@ public enum EPUBParserError {
 }
 
 // MARK: - LocalizedError
+
 extension EPUBParserError: LocalizedError {
     public var errorDescription: String? {
         switch self {

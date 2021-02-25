@@ -6,15 +6,14 @@
 //  Copyright © 2018 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 protocol EPUBSpineParser {
     func parse(_ xmlElement: AEXMLElement) -> EPUBSpine
 }
 
 class EPUBSpineParserImplementation: EPUBSpineParser {
-
     func parse(_ xmlElement: AEXMLElement) -> EPUBSpine {
         let items: [EPUBSpineItem] = xmlElement["itemref"].all?.compactMap { item in
             let id = item.attributes["id"]
@@ -32,5 +31,4 @@ class EPUBSpineParserImplementation: EPUBSpineParser {
             items: items
         )
     }
-
 }

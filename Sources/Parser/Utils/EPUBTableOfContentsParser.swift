@@ -6,15 +6,14 @@
 //  Copyright © 2018 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 protocol EPUBTableOfContentsParser {
     func parse(_ xmlElement: AEXMLElement) -> EPUBTableOfContents
 }
 
 class EPUBTableOfContentsParserImplementation: EPUBTableOfContentsParser {
-
     func parse(_ xmlElement: AEXMLElement) -> EPUBTableOfContents {
         let item = xmlElement["head"]["meta"].all(
             withAttributes: ["name": "dtb=uid"])?.first?.attributes["content"]
@@ -25,11 +24,9 @@ class EPUBTableOfContentsParserImplementation: EPUBTableOfContentsParser {
         tableOfContents.subTable = evaluateChildren(from: xmlElement["navMap"])
         return tableOfContents
     }
-
 }
 
 extension EPUBTableOfContentsParserImplementation {
-
     private func evaluateChildren(from xmlElement: AEXMLElement) -> [EPUBTableOfContents] {
         guard let points = xmlElement["navPoint"].all else { return [] }
         let subs: [EPUBTableOfContents] = points.map { point in
@@ -42,5 +39,4 @@ extension EPUBTableOfContentsParserImplementation {
         }
         return subs
     }
-
 }

@@ -6,15 +6,14 @@
 //  Copyright © 2018 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 protocol EPUBManifestParser {
     func parse(_ xmlElement: AEXMLElement) -> EPUBManifest
 }
 
 class EPUBManifestParserImplementation: EPUBManifestParser {
-
     func parse(_ xmlElement: AEXMLElement) -> EPUBManifest {
         var items: [String: EPUBManifestItem] = [:]
         xmlElement["item"].all?
@@ -32,5 +31,4 @@ class EPUBManifestParserImplementation: EPUBManifestParser {
             }.forEach { items[$0.id] = $0 }
         return EPUBManifest(id: xmlElement["id"].value, items: items)
     }
-
 }

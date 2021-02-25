@@ -9,7 +9,6 @@
 import Foundation
 
 public struct EPUBDocument {
-
     public let directory: URL
     public let contentDirectory: URL
     public let metadata: EPUBMetadata
@@ -17,12 +16,13 @@ public struct EPUBDocument {
     public let spine: EPUBSpine
     public let tableOfContents: EPUBTableOfContents
 
-    init (directory: URL,
-          contentDirectory: URL,
-          metadata: EPUBMetadata,
-          manifest: EPUBManifest,
-          spine: EPUBSpine,
-          tableOfContents: EPUBTableOfContents) {
+    init(directory: URL,
+         contentDirectory: URL,
+         metadata: EPUBMetadata,
+         manifest: EPUBManifest,
+         spine: EPUBSpine,
+         tableOfContents: EPUBTableOfContents)
+    {
         self.directory = directory
         self.contentDirectory = contentDirectory
         self.metadata = metadata
@@ -31,18 +31,17 @@ public struct EPUBDocument {
         self.tableOfContents = tableOfContents
     }
 
-    public init?(url: URL) {
-        guard let document = try? EPUBParser().parse(documentAt: url) else { return nil }
+    public init?(url: URL, unarchiveDirectory: URL?) {
+        guard let document = try? EPUBParser().parse(documentAt: url, unarchiveDirectory: unarchiveDirectory) else { return nil }
         self = document
     }
-
 }
 
-extension EPUBDocument {
-    public var title: String? { metadata.title }
-    public var author: String? { metadata.creator?.name }
-    public var publisher: String? { metadata.publisher }
-    public var cover: URL? {
+public extension EPUBDocument {
+    var title: String? { metadata.title }
+    var author: String? { metadata.creator?.name }
+    var publisher: String? { metadata.publisher }
+    var cover: URL? {
         guard let coverId = metadata.coverId, let path = manifest.items[coverId]?.path else {
             return nil
         }

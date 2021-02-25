@@ -6,15 +6,14 @@
 //  Copyright © 2018 Witek Bobrowski. All rights reserved.
 //
 
-import Foundation
 import AEXML
+import Foundation
 
 protocol EPUBMetadataParser {
     func parse(_ xmlElement: AEXMLElement) -> EPUBMetadata
 }
 
 class EPUBMetadataParserImplementation: EPUBMetadataParser {
-
     func parse(_ xmlElement: AEXMLElement) -> EPUBMetadata {
         var metadata = EPUBMetadata()
         metadata.contributor = Creator(
@@ -45,5 +44,4 @@ class EPUBMetadataParserImplementation: EPUBMetadataParser {
             .forEach { metadata.coverId = $0.attributes["content"] }
         return metadata
     }
-
 }
