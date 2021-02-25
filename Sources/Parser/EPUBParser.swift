@@ -75,7 +75,7 @@ public final class EPUBParser: EPUBParserProtocol {
 }
 
 extension EPUBParser: EPUBParsable {
-    public func unzip(archiveAt path: URL, extractionDirectory extractionPath: URL) throws -> URL {
+    public func unzip(archiveAt path: URL, extractionDirectory extractionPath: URL?) throws -> URL {
         try archiveService.unarchive(archive: path, extractionDirectory: extractionPath)
     }
 

@@ -18,12 +18,13 @@ class EPUBArchiveServiceImplementation: EPUBArchiveService {
         Zip.addCustomFileExtension("epub")
     }
 
-    func unarchive(archive url: URL, extractionDirectory destinationUrl: URL?) throws -> URL {
+    func unarchive(archive url: URL, extractionDirectory extractionPathUrl: URL?) throws -> URL {
         var destination: URL
 
         do {
-            if let destination = destinationUrl {
-                destination = try Zip.unzipFile(url, destination: destination)
+            if let extractionUrl = extractionPathUrl {
+                try Zip.unzipFile(url, destination: extractionUrl, overwrite: true, password: nil, progress: nil)
+                destination = extractionUrl
             } else {
                 destination = try Zip.quickUnzipFile(url)
             }
